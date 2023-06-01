@@ -1,0 +1,140 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+}
+@section link{
+
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+}
+<div >
+    <!--Model-->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!--Model content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Fill Employee Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group-row">
+                        <div class="col-sm-10">
+                            <input type="hidden" class="form-control" id="EmployeeId" disabled="disabled" placeholder="ID" />
+                        </div>
+
+                    </div><br />
+                    <div class="form-group-row">
+                        <label class="col-sm-2 col-form-label" for="Name">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="Name" placeholder="Name" />
+                        </div>
+
+                    </div><br />
+                    <div class="form-group-row">
+                        <label class="col-sm-2 col-form-label" for="Age">Age</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="Age" placeholder="Age" />
+                        </div>
+
+                    </div><br />
+                    <div class="form-group-row">
+                        <label class="col-sm-2 col-form-label" for="State">Country</label>
+                        <div class="col-sm-10">
+                            <select id="ddlCountry" class="form-control">
+                            </select><br />
+                        </div>
+                    </div><br />
+                    <div class="form-group-row">
+                        <label class="col-sm-2 col-form-label">State</label>
+                        <div class="col-sm-10">
+                            <select id="ddlState" class="form-control">
+                            </select><br />
+                        </div>
+                    </div><br />
+                </div>
+                <div class="modal-footer">
+                    <div>
+                        <button type="button" id="btnAdd" class="btn btn-success"><i class="fa fa-plus-square">&nbspSave</i></button>
+                    </div>
+                    <button type="submit" id="close" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+        <button type="button" id="btnModal" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-square">&nbspAdd New</i></button><br />
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <h2>Employees Record </h2>
+            <table id="tblEmployee" class="table table-striped table-bordered dt-responsive nowrap" width="100%">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Name</td>
+                        <td>Age</td>
+                        <td>State</td>
+                        <td>Country</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/Industry/Employee.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script>
+        Employee.Init();
+        function Delete(ID) {
+            debugger;
+            var ans = confirm(" Are you sure you want to delete this Record?");
+            if (ans) {
+                $.ajax({
+                    url: "/IndustryDemo/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function(result){
+                    Employee.loaddata();
+                },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                   
+                });
+            }
+        }
+        function GetbyID(id) {
+            $.ajax({
+                url: "/IndustryDemo/GetbyID/",
+                type: "POST",
+                data: { empID: id },
+                success: function (result) {
+                    Employee.LoadEmployeeData(result);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+
+            });
+            return false;
+        }
+    </script>
+
+}
+
+
+
+
+
